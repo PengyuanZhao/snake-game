@@ -6,9 +6,9 @@ import {
   LEFT,
   UP,
   RIGHT,
-  DOWN,
-} from './constants';
-import './index.scss';
+  DOWN
+} from "./constants";
+import "./index.css";
 
 class Snake {
   constructor() {
@@ -19,22 +19,23 @@ class Snake {
   }
 
   initField() {
-    const table = document.createElement('table');
-    table.className = 'field';
+    const table = document.createElement("table");
+    table.className = "field";
     for (let i = 0; i < TOTAL_ROWS; i++) {
-      const tr = document.createElement('tr');
+      const tr = document.createElement("tr");
       for (let j = 0; j < TOTAL_COLS; j++) {
-        const td = document.createElement('td');
-        const isWall = (i === 0 || i === TOTAL_ROWS - 1 || j === 0 || j === TOTAL_COLS - 1);
-        td.className = isWall ? 'wall' : 'blank';
+        const td = document.createElement("td");
+        const isWall =
+          i === 0 || i === TOTAL_ROWS - 1 || j === 0 || j === TOTAL_COLS - 1;
+        td.className = isWall ? "wall" : "blank";
         td.id = `${j}-${i}`;
         tr.appendChild(td);
       }
       table.appendChild(tr);
     }
 
-    const dashboard = document.createElement('div');
-    dashboard.className = 'dashboard';
+    const dashboard = document.createElement("div");
+    dashboard.className = "dashboard";
     dashboard.innerHTML = `
       <span class="dashboard__score">Score: <span>0</span></span>
       <span class="dashboard__alert"></span>
@@ -48,11 +49,11 @@ class Snake {
       </ul>
     `;
 
-    const snake = document.getElementById('snake');
+    const snake = document.getElementById("snake");
     snake.appendChild(table);
     snake.appendChild(dashboard);
-    this.dashboardScore = document.querySelector('.dashboard__score span');
-    this.dashboardAlert = document.querySelector('.dashboard__alert');
+    this.dashboardScore = document.querySelector(".dashboard__score span");
+    this.dashboardAlert = document.querySelector(".dashboard__alert");
   }
 
   initSnake() {
@@ -61,12 +62,14 @@ class Snake {
     this.direction = RIGHT;
     this.snakeHead = { x: INITIAL_SNAKE_LENGTH, y: 1 };
     this.snakeCells = [];
-    this.dashboardAlert.textContent = '';
-    document.querySelectorAll('.snake').forEach(elem => elem.classList.remove('snake'));
+    this.dashboardAlert.textContent = "";
+    document
+      .querySelectorAll(".snake")
+      .forEach(elem => elem.classList.remove("snake"));
 
     // Show initial snake in top left.
     for (let i = 1; i <= INITIAL_SNAKE_LENGTH; i++) {
-      document.getElementById(`${i}-1`).setAttribute('class', 'snake');
+      document.getElementById(`${i}-1`).setAttribute("class", "snake");
       this.snakeCells.push({ x: i, y: 1 });
     }
 
@@ -81,39 +84,47 @@ class Snake {
     if (this.direction === UP) this.snakeHead.y--;
     if (this.direction === DOWN) this.snakeHead.y++;
 
-    const snakeHeadElem = document.getElementById(`${this.snakeHead.x}-${this.snakeHead.y}`);
+    const snakeHeadElem = document.getElementById(
+      `${this.snakeHead.x}-${this.snakeHead.y}`
+    );
 
-    if (snakeHeadElem.classList.contains('snake') || snakeHeadElem.classList.contains('wall')) {
+    if (
+      snakeHeadElem.classList.contains("snake") ||
+      snakeHeadElem.classList.contains("wall")
+    ) {
       console.log(snakeHeadElem.classList);
       this.isOver = true;
-      this.dashboardAlert.innerHTML = 'Game Over!';
+      this.dashboardAlert.innerHTML = "Game Over!";
       clearInterval(this.intervalId);
       return;
     }
 
     // If food is eaten, increment score. Otherwise, cut off the tail cell.
-    if (snakeHeadElem.classList.contains('food')) {
+    if (snakeHeadElem.classList.contains("food")) {
       this.score++;
       this.dashboardScore.textContent = this.score;
       this.makeFood();
     } else {
       const snakeTail = this.snakeCells.shift();
-      document.getElementById(`${snakeTail.x}-${snakeTail.y}`).setAttribute('class', 'blank');
+      document
+        .getElementById(`${snakeTail.x}-${snakeTail.y}`)
+        .setAttribute("class", "blank");
     }
 
     // Move forward by adding the new head to snake.
-    snakeHeadElem.setAttribute('class', 'snake');
+    snakeHeadElem.setAttribute("class", "snake");
     this.snakeCells.push({ ...this.snakeHead });
-  }
+  };
 
   makeFood() {
-    const blankCells = document.querySelectorAll('.blank');
-    const randomCell = blankCells[Math.floor(Math.random() * blankCells.length)];
-    randomCell.setAttribute('class', 'food');
+    const blankCells = document.querySelectorAll(".blank");
+    const randomCell =
+      blankCells[Math.floor(Math.random() * blankCells.length)];
+    randomCell.setAttribute("class", "food");
   }
 
   handleOnKeydown() {
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener("keydown", e => {
       const key = e.keyCode;
       if (key === LEFT && this.direction !== RIGHT) this.direction = LEFT;
       if (key === UP && this.direction !== DOWN) this.direction = UP;
@@ -124,7 +135,7 @@ class Snake {
       // If `SPACE` is pressed, pause or unpause game
       if (key === 32 && !this.isOver) {
         this.isPaused = !this.isPaused;
-        this.dashboardAlert.textContent = this.isPaused ? 'PAUSED' : '';
+        this.dashboardAlert.textContent = this.isPaused ? "PAUSED" : "";
       }
     });
   }

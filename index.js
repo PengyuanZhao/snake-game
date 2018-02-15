@@ -1,4 +1,3 @@
-import Snake from './Snake';
-import './index.scss';
+import Snake from "./Snake";
 
 new Snake();
