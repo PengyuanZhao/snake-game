@@ -5,8 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const paths = {
-  indexJs: resolve(__dirname, 'src/index.js'),
-  indexHtml: resolve(__dirname, 'src/index.html'),
+  indexJs: resolve(__dirname, 'index.js'),
+  indexHtml: resolve(__dirname, 'index.html'),
   dist: resolve(__dirname, 'dist'),
 };
 
